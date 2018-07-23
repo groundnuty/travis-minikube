@@ -53,7 +53,7 @@ script:
 - helm ls
 - kubectl get all --all-namespaces
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get pods -lcomponent=onezone-ready-check -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
-
+- kubectl logs -lchart=onezone
 # Create example Redis deployment on Kubernetes.
 #- kubectl run travis-example --image=redis --labels="app=travis-example"
 # Make sure created pod is scheduled and running.
