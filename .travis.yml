@@ -8,7 +8,6 @@ env:
     - MINI_KUBE_VERSION="v0.28.1" # k8s 1.10.* compatibile
   matrix:
     - CHANGE_MINIKUBE_NONE_USER=true
-    - USE_NETWORK=false
 
 before_script:
 # Download kubectl, which is a requirement for using minikube.
