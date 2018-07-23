@@ -4,8 +4,8 @@ sudo: required
 env:
   global:
     - HELM_VERSION="v2.8.0"
-    - K8S_VERSION="v1.10.5"
-    - MINI_KUBE_VERSION="v0.28.1" # k8s 1.10.* compatibile
+    - K8S_VERSION="v1.9.0"
+    - MINI_KUBE_VERSION="v0.25.2" # k8s 1.9.* compatibile
   matrix:
     - CHANGE_MINIKUBE_NONE_USER=true
 
