@@ -14,6 +14,7 @@ before_script:
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 # Download minikube.
 - curl -Lo minikube https://storage.googleapis.com/minikube/releases/{$MINI_KUBE_VERSION}/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+- curl -s https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar -xz & mv linux-amd64/helm /usr/local/bin/
 - sudo minikube start --vm-driver=none --kubernetes-version=${K8S_VERSION}
 # Fix the kubectl context, as it's often stale.
 - minikube update-context
@@ -30,7 +31,6 @@ script:
 - git clone -b feature/luma https://github.com/onedata/charts.git
 - cd charts/stable
 - ./repository-dev.sh
-- curl -s https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar -xz -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin/
 - make cross-support-job-3p cross-support-job-1p
 - helm install onezone
 # Create example Redis deployment on Kubernetes.
