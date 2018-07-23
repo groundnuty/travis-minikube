@@ -30,7 +30,7 @@ script:
 - git clone -b feature/luma https://github.com/onedata/charts.git
 - cd charts/stable
 - ./repository-dev.sh
-- curl -s https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar -xz -C /tmp && mv /tmp/linux-amd64/helm /usr/bin
+- curl -s https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar -xz -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin/
 - make cross-support-job-3p cross-support-job-1p
 - helm install onezone
 # Create example Redis deployment on Kubernetes.
