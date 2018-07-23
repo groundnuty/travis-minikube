@@ -49,7 +49,7 @@ script:
 - ls -la
 - make cross-support-job-3p cross-support-job-1p
 - export CLUSTER_DOMAIN=$(JSONPATH='{.items[0].spec.containers[0].args[0]}'; kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH"  | cut -d '=' -f2  | sed 's/.$//') ; 
-- helm install -set global.region=${CLUSTER_DOMAIN%%.*},global.tld=${CLUSTER_DOMAIN#*.} -n test onezone
+- helm install --debug -set global.region=${CLUSTER_DOMAIN%%.*},global.tld=${CLUSTER_DOMAIN#*.} -n test onezone
 - helm ls
 - kubectl get all --all-namespaces
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get pods -lchart=onezone -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
