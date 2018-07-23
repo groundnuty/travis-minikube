@@ -40,7 +40,7 @@ script:
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-dns to be available"; kubectl get pods --all-namespaces; done
 # Wait for helm to be read
 - helm init
-- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lapp=helm,name=tiller -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-dns to be available"; kubectl get pods --all-namespaces; done
+- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lapp=helm,name=tiller -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for helm(tiller) to be available"; kubectl get pods --all-namespaces; done
 - kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts
 - helm ls 
 - git clone -b feature/luma https://github.com/onedata/charts.git
@@ -49,7 +49,7 @@ script:
 - ls -la
 - make cross-support-job-3p cross-support-job-1p
 - export CLUSTER_DOMAIN=$(JSONPATH='{.items[0].spec.containers[0].args[0]}'; kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH"  | cut -d '=' -f2  | sed 's/.$//') ; 
-- helm install --dry-run --set global.region=${CLUSTER_DOMAIN%%.*},global.tld=${CLUSTER_DOMAIN#*.} -n test onezone
+- helm install -set global.region=${CLUSTER_DOMAIN%%.*},global.tld=${CLUSTER_DOMAIN#*.} -n test onezone
 - helm ls
 - kubectl get all --all-namespaces
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get pods -lchart=onezone -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
