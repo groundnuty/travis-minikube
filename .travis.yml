@@ -24,7 +24,7 @@ before_script:
 - tar -zxvf helm.tgz 
 - ls -la
 - sudo mv linux-amd64/helm /usr/local/bin/
-- sudo minikube start --vm-driver=localkube --kubernetes-version=${K8S_VERSION}
+- sudo minikube start  --vm-driver=none --bootstrapper=localkube --kubernetes-version=${K8S_VERSION}
 # Fix the kubectl context, as it's often stale.
 - minikube update-context
 # Wait for Kubernetes to be up and ready.
