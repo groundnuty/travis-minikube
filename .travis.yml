@@ -48,7 +48,8 @@ script:
 - ./repository-dev.sh
 - ls -la
 - make cross-support-job-3p cross-support-job-1p
-- helm install onezone
+- export CLUSTER_DOMAIN=$(JSONPATH='{.items[0].spec.containers[0].args[0]}'; kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH"  | cut -d '=' -f2  | sed 's/.$//') ; 
+- helm install --dry-run --set global.region=${CLUSTER_DOMAIN%%.*},global.tld=${CLUSTER_DOMAIN#*.} onezone
 # Create example Redis deployment on Kubernetes.
 #- kubectl run travis-example --image=redis --labels="app=travis-example"
 # Make sure created pod is scheduled and running.
