@@ -10,6 +10,11 @@ env:
     - CHANGE_MINIKUBE_NONE_USER=true
 
 before_script:
+- sudo apt-get update && sudo apt-get install -y git build-essential libncurses5-dev libslang2-dev gettext zlib1g-dev libselinux1-dev debhelper lsb-release pkg-config po-debconf autoconf automake autopoint libtool bison
+- git clone git://git.kernel.org/pub/scm/utils/util-linux/util-linux.git util-linux
+- cd util-linux/ && ./autogen.sh && ./configure --without-python --disable-all-programs --enable-nsenter && make
+- sudo mv nsenter /usr/local/bin/nsenter
+- cd
 # Download kubectl, which is a requirement for using minikube.
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 # Download minikube.
@@ -24,10 +29,6 @@ before_script:
 - minikube update-context
 # Wait for Kubernetes to be up and ready.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
-- sudo apt-get update && sudo apt-get install -y git build-essential libncurses5-dev libslang2-dev gettext zlib1g-dev libselinux1-dev debhelper lsb-release pkg-config po-debconf autoconf automake autopoint libtool bison
-- git clone git://git.kernel.org/pub/scm/utils/util-linux/util-linux.git util-linux
-- cd util-linux/ && ./autogen.sh && ./configure --without-python --disable-all-programs --enable-nsenter && make
-- sudo mv util-linux/nsenter /usr/local/bin/nsenter
 
 
 script:
