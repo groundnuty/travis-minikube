@@ -18,7 +18,7 @@ before_script:
 - ls -la
 - tar -zxvf helm.tgz 
 - ls -la
-- mv linux-amd64/helm /usr/local/bin/
+- sudo mv linux-amd64/helm /usr/local/bin/
 - sudo minikube start --vm-driver=none --kubernetes-version=${K8S_VERSION}
 # Fix the kubectl context, as it's often stale.
 - minikube update-context
